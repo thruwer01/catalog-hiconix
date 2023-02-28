@@ -13,3 +13,6 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+apidoc.json
+/apidoc
+tz.txt

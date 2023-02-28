@@ -49,6 +49,13 @@ class UserListLayout extends Table
                         ]);
                 }),
 
+            TD::make('manager_number', __('Номер менеджера'))
+                ->cantHide()
+                ->sort()
+                ->render(function (User $user) {
+                    return $user->manager_number;
+                }),
+
             TD::make('updated_at', __('Last edit'))
                 ->sort()
                 ->render(function (User $user) {

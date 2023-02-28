@@ -50,10 +50,12 @@ class PlatformScreen extends Screen
         return [
             Link::make(__('Website'))
                 ->href('https://hiconix.ru')
+                ->target('_blank')
                 ->icon('globe-alt'),
 
             Link::make(__('Documentation'))
                 ->href('https://orchid.software/en/docs')
+                ->target('_blank')
                 ->icon('docs'),
 
         ];
@@ -67,7 +69,7 @@ class PlatformScreen extends Screen
     public function layout(): iterable
     {
         return [
-            // Layout::view('platform::partials.welcome'),
+            Layout::view('welcome.main'),
         ];
     }
 }

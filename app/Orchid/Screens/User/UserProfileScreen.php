@@ -6,6 +6,7 @@ namespace App\Orchid\Screens\User;
 
 use App\Orchid\Layouts\User\ProfilePasswordLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
+use App\Orchid\Layouts\User\UserTokenLayout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -79,6 +80,19 @@ class UserProfileScreen extends Screen
                         ->method('save')
                 ),
 
+            Layout::block(UserTokenLayout::class)
+                ->title(__('Token information'))
+                ->description(__("Information about your API & YML access") .
+                    "<br>см. <a href=\"/documentation\">документацию</a>"
+                )
+                ->commands(
+                    Button::make(__('Generate'))
+                        ->type(Color::DEFAULT())
+                        ->icon('reload')
+                        ->confirm(__("Are you sure you want to generate a new token?"))
+                        ->method('tokenUpdate')
+                ),
+
             Layout::block(ProfilePasswordLayout::class)
                 ->title(__('Update Password'))
                 ->description(__('Ensure your account is using a long, random password to stay secure.'))
@@ -89,6 +103,16 @@ class UserProfileScreen extends Screen
                         ->method('changePassword')
                 ),
         ];
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function tokenUpdate(Request $request): void
+    {
+        $request->user()->updateToken();
+
+        Toast::info(__('Token updated.'));
     }
 
     /**

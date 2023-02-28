@@ -1,0 +1,1 @@
+{!! print_r($log->collect()) !!}

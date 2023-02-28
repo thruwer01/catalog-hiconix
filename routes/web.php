@@ -1,14 +1,19 @@
 <?php
 
+use App\Http\Controllers\GetManagerAmoController;
+use App\Http\Controllers\SyncPriceController;
+use App\Http\Controllers\SyncStockController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+// Platform > System > Sync Price with 1C
+Route::match(['get', 'post'],'/sync_price', [SyncPriceController::class, 'sync'])
+    ->name('platform.sync.price')
+    ->middleware('guest');
+
+// Platform > System > Sync Stock with 1C
+Route::match(['get', 'post'],'/sync_stock', [SyncStockController::class, 'sync'])
+    ->name('platform.sync.stock')
+    ->middleware('guest');
+
+// Get manager amo id from site request
+Route::get('/manager/get_by_number', [GetManagerAmoController::class, 'get'])->middleware('guest');

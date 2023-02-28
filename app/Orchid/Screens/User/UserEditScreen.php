@@ -8,8 +8,11 @@ use App\Orchid\Layouts\Role\RolePermissionLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserPasswordLayout;
 use App\Orchid\Layouts\User\UserRoleLayout;
+use App\Orchid\Layouts\User\UserTokenLayout;
+use App\Orchid\Layouts\User\UserTokenSettingsLayout;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Orchid\Access\UserSwitch;
@@ -20,6 +23,8 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use App\Models\User as UserModel;
+use Orchid\Screen\Fields\Input;
 
 class UserEditScreen extends Screen
 {
@@ -85,7 +90,7 @@ class UserEditScreen extends Screen
         return [
             Button::make(__('Impersonate user'))
                 ->icon('login')
-                ->confirm('You can revert to your original state by logging out.')
+                ->confirm(__('You can revert to your original state by logging out.'))
                 ->method('loginAs')
                 ->canSee($this->user->exists && \request()->user()->id !== $this->user->id),
 
@@ -107,8 +112,32 @@ class UserEditScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::block([
+                Layout::rows([
+                    Input::make('user.name')
+                        ->type('text')
+                        ->max(255)
+                        ->required()
+                        ->title(__('Name'))
+                        ->placeholder(__('Name')),
 
-            Layout::block(UserEditLayout::class)
+                    Input::make('user.email')
+                        ->type('email')
+                        ->required()
+                        ->title(__('Email'))
+                        ->placeholder(__('Email')),
+
+                    Input::make('user.manager_number')
+                        ->type('number')
+                        ->title('Номер менеджера')
+                        ->canSee($this->user->inRole('manager')),
+
+                    Input::make('user.manager_amo_id')
+                        ->type('text')
+                        ->title('ID из amoCRM')
+                        ->canSee($this->user->inRole('manager')),
+                ]),
+            ])
                 ->title(__('Profile Information'))
                 ->description(__('Update your account\'s profile information and email address.'))
                 ->commands(
@@ -118,6 +147,22 @@ class UserEditScreen extends Screen
                         ->canSee($this->user->exists)
                         ->method('save')
                 ),
+
+            Layout::block(UserTokenLayout::class)
+                ->title(__('Catalog access'))
+                ->description(__("Information about user access to catalog"))
+                ->canSee(Auth::user()->hasAccess('platform.systems.token'))
+                ->commands(
+                    Button::make(__('Generate'))
+                        ->type(Color::DEFAULT())
+                        ->icon('reload')
+                        ->confirm(__("Are you sure you want to generate a new token for user?"))
+                        ->method('tokenUpdate')
+                ),
+
+            /* Layout::block(UserTokenSettingsLayout::class)
+                ->title(__('Upload settings'))
+                ->canSee(Auth::user()->hasAccess('platform.systems.uploadSettings')), */
 
             Layout::block(UserPasswordLayout::class)
                 ->title(__('Password'))
@@ -222,5 +267,10 @@ class UserEditScreen extends Screen
         Toast::info(__('You are now impersonating this user'));
 
         return redirect()->route(config('platform.index'));
+    }
+    public function tokenUpdate(User $user): void
+    {
+        UserModel::updateToken($user);
+        Toast::info(__('Token updated.'));
     }
 }

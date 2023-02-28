@@ -6,5 +6,18 @@
     "Products": "Товары",
     "Clients list": "Список клиентов",
     "Documentation": "Документация",
-    "Website": "Сайт"
+    "Website": "Сайт",
+    "Token": "API-ключ",
+    "Token information": "Ключи доступа",
+    "Information about your API & YML access": "Информация о ключах доступа к API и других выгрузках",
+    "Generate": "Сгенерировать",
+    "Token updated": "Ключ обновлен",
+    "Are you sure you want to generate a new token?": "Вы уверены что хотите сгенерировать новый токен?",
+    "Information about user access to catalog": "Информация о доступах пользователя к каталогу",
+    "Are you sure you want to generate a new token for user?": "Вы уверены что хотите сгенерировать новый токен для пользователя?",
+    "Catalog access": "Доступы к каталогу",
+    "Update token": "Обновлять токены",
+    "Upload settings": "Настройки выгрузки",
+    "All registered clients": "Все зарегистрированные клиенты",
+    "You can revert to your original state by logging out.": "Вы легко сможете вернуться в свой аккаунт"
 }

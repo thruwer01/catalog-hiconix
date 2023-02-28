@@ -16,6 +16,10 @@ class User extends Authenticatable
         'email',
         'password',
         'permissions',
+        'is_full_export',
+        'is_important',
+        'mailing_list',
+        'token'
     ];
 
     /**
@@ -63,4 +67,11 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    public static function updateToken($user)
+    {
+        $bytes = openssl_random_pseudo_bytes(32);
+        $newToken = mb_substr(bin2hex($bytes), 0, 16);
+        User::find($user->id)->update(['token' => $newToken]);
+    }
 }

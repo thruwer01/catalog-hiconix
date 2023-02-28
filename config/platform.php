@@ -110,7 +110,9 @@ return [
 
     'resource' => [
         'stylesheets' => [],
-        'scripts'     => [],
+        'scripts'     => [
+            'deleteController.js'
+        ],
     ],
 
     /*
@@ -158,6 +160,7 @@ return [
 
     'icons' => [
         'orc' => \Orchid\IconPack\Path::getFolder(),
+        'fa' => resource_path('icons/faw'),
     ],
 
     /*
@@ -175,7 +178,7 @@ return [
     */
 
     'notifications' => [
-        'enabled'  => true,
+        'enabled'  => false,
         'interval' => 60,
     ],
 
@@ -190,7 +193,8 @@ return [
     */
 
     'search' => [
-        // \App\Models\User::class
+        // \App\Models\User::class,
+        // \App\Models\Product::class
     ],
 
     /*

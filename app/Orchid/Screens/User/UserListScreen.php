@@ -7,6 +7,7 @@ namespace App\Orchid\Screens\User;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserFiltersLayout;
 use App\Orchid\Layouts\User\UserListLayout;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Orchid\Platform\Models\User;
@@ -26,6 +27,9 @@ class UserListScreen extends Screen
     {
         return [
             'users' => User::with('roles')
+                ->whereHas('roles', function (Builder $query) {
+                    $query->where('slug', '!=', 'client');
+                })
                 ->filters()
                 ->filtersApplySelection(UserFiltersLayout::class)
                 ->defaultSort('id', 'desc')
